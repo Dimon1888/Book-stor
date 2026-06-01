@@ -3,3 +3,4 @@
 search/index.json linguist-generated
 *.generated.json generated=false
 path/to/my/auto-files/* generated=false
+bootstrap.min.css -linguist-generated
