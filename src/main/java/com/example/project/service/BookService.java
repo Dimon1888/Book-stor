@@ -5,9 +5,9 @@ import com.example.project.dto.CreateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    List<BookDto> getAll(); // замість findAll()
+    List<BookDto> getAll();
 
-    BookDto getBookById(Long id); // замість findById()
+    BookDto getBookById(Long id);
 
-    BookDto createBook(CreateBookRequestDto requestDto); // замістьproject.
+    BookDto createBook(CreateBookRequestDto requestDto);
 }

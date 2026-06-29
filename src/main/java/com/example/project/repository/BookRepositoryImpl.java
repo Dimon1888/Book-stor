@@ -38,7 +38,6 @@ public class BookRepositoryImpl implements BookRepository {
                 try {
                     transaction.rollback();
                 } catch (Exception rollbackEx) {
-                    // Приглушаємо помилку відкату, щоб не втратити оригінальний Exception
                     e.addSuppressed(rollbackEx);
                 }
             }
@@ -60,6 +59,8 @@ public class BookRepositoryImpl implements BookRepository {
         try (EntityManager entityManager = sessionFactory.createEntityManager()) {
             Book book = entityManager.find(Book.class, id);
             return Optional.ofNullable(book);
+        } catch (Exception e) {
+            throw new DataProcessingException("Cannot find book by id: " + id, e);
         }
     }
 }
