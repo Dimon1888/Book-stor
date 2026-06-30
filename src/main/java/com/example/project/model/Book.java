@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.project.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,10 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "books")
 public class Book {
     @Id
@@ -32,5 +34,5 @@ public class Book {
     private String description;
 
     private String coverImage;
-}
 
+}
