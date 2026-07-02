@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import com.example.project.dto.BookDto;
+import com.example.project.dto.BookSearchParametersDto;
 import com.example.project.dto.CreateBookRequestDto;
 import com.example.project.service.BookService;
 import java.util.List;
@@ -25,6 +26,11 @@ public class BookController {
     @GetMapping
     public List<BookDto> getAll() {
         return bookService.getAll();
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 
     @GetMapping("/{id}")
