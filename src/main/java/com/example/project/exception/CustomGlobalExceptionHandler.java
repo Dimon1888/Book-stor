@@ -32,7 +32,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
                 .toList();
-        body.put("status", errors);
+        body.put("errors", errors);
 
         return new ResponseEntity<>(body, headers, HttpStatus.BAD_REQUEST);
     }
@@ -41,15 +41,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
     private String getErrorMessage(ObjectError error) {
         if (error instanceof FieldError fieldError) {
-            String field = fieldError.getField();
-            String message = error.getDefaultMessage();
-            return field + " " + message;
+            return fieldError.getField() + " " + error.getDefaultMessage();
         }
         return error.getDefaultMessage();
     }
