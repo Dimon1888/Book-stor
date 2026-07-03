@@ -28,14 +28,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", status.value());
 
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
                 .toList();
-        body.put("errors", errors);
+        body.put("status", errors);
 
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -43,13 +42,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
     private String getErrorMessage(ObjectError error) {
-        if (error instanceof FieldError) {
-            String field = ((FieldError) error).getField();
+        if (error instanceof FieldError fieldError) {
+            String field = fieldError.getField();
             String message = error.getDefaultMessage();
             return field + " " + message;
         }
