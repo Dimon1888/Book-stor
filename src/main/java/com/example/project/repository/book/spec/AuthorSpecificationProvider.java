@@ -7,15 +7,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
+    public static final String KEY = "author";
+
     @Override
     public String getKey() {
-        return "author";
+        return KEY;
     }
 
     @Override
     public Specification<Book> getSpecification(String[] params) {
+        if (params == null || params.length == 0 || params[0] == null) {
+            return (root, query, cb) -> null;
+        }
         return (root, query, cb) -> cb.like(
-                cb.lower(root.get("author")), "%" + params[0].toLowerCase() + "%"
+                cb.lower(root.get(KEY)), "%" + params[0].toLowerCase() + "%"
         );
     }
 }
