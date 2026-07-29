@@ -9,47 +9,50 @@ import com.example.project.model.Book;
 import com.example.project.repository.BookRepository;
 import com.example.project.repository.book.BookSpecificationBuilder;
 import com.example.project.service.BookService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
-    public BookDto createBook(CreateBookRequestDto requestDto) {
-        Book book = bookMapper.toModel(requestDto);
-        return bookMapper.toDto(bookRepository.save(book));
+    public Page<BookDto> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toDto);
+    }
+
+    @Override
+    public Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
+        Specification<Book> spec = bookSpecificationBuilder.build(searchParameters);
+        return bookRepository.findAll(spec, pageable)
+                .map(bookMapper::toDto);
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Could not find book by id: " + id)
-        );
-        return bookMapper.toDto(book);
-    }
-
-    @Override
-    public List<BookDto> getAll() {
-        return bookRepository.findAll().stream()
+        return bookRepository.findById(id)
                 .map(bookMapper::toDto)
-                .toList();
+                .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
     }
 
     @Override
-    @Transactional
-    public BookDto update(Long id, CreateBookRequestDto requestDto) {
-        Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Could not find book by id: " + id)
-        );
-        bookMapper.updateBookFromDto(requestDto, book);
+    public BookDto createBook(CreateBookRequestDto bookDto) {
+        Book book = bookMapper.toModel(bookDto);
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    @Override
+    public BookDto update(Long id, CreateBookRequestDto bookDto) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
+        bookMapper.updateBookFromDto(bookDto, book);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -57,13 +60,4 @@ public class BookServiceImpl implements BookService {
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
-
-    @Override
-    public List<BookDto> search(BookSearchParametersDto params) {
-        Specification<Book> bookSpecification = bookSpecificationBuilder.build(params);
-        return bookRepository.findAll(bookSpecification).stream()
-                .map(bookMapper::toDto)
-                .toList();
-    }
-
 }
