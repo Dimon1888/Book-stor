@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: create-users-table
       author: your_name
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: users
       changes:
         - createTable:
             tableName: users
