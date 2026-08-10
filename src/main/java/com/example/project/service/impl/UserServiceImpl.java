@@ -14,8 +14,10 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -35,7 +37,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         Role defaultRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RegistrationException("Default role ROLE_USER not found"));
+                .orElseThrow(() -> new RegistrationException("Default role "
+                        + RoleName.ROLE_USER + " not found"));
         user.setRoles(Set.of(defaultRole));
 
         User savedUser = userRepository.save(user);
