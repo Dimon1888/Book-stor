@@ -1,22 +1,22 @@
 package com.example.project.mapper;
 
+import com.example.project.config.MapperConfig;
 import com.example.project.dto.BookDto;
 import com.example.project.dto.CreateBookRequestDto;
 import com.example.project.model.Book;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
 
-@Mapper(
-        componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-)
+@Mapper(config = MapperConfig.class)
 public interface BookMapper {
     BookDto toDto(Book book);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
-    void updateBookFromDto(CreateBookRequestDto requestDto, @MappingTarget Book book);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    void updateBookFromDto(CreateBookRequestDto dto, @MappingTarget Book book);
 }
