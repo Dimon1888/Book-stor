@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -37,4 +38,6 @@ public class CreateBookRequestDto {
     private String description;
 
     private String coverImage;
+
+    private List<Long> categoryIds;
 }
