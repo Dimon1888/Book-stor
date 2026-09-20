@@ -2,6 +2,7 @@ package com.example.project.service.impl;
 
 import com.example.project.dto.UserRegistrationRequestDto;
 import com.example.project.dto.UserResponseDto;
+import com.example.project.exception.EntityNotFoundException;
 import com.example.project.exception.RegistrationException;
 import com.example.project.mapper.UserMapper;
 import com.example.project.model.Role;
@@ -9,6 +10,7 @@ import com.example.project.model.RoleName;
 import com.example.project.model.User;
 import com.example.project.repository.RoleRepository;
 import com.example.project.repository.user.UserRepository;
+import com.example.project.service.ShoppingCartService;
 import com.example.project.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto request)
@@ -37,11 +40,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         Role defaultRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RegistrationException("Default role "
+                .orElseThrow(() -> new EntityNotFoundException("Default role "
                         + RoleName.ROLE_USER + " not found"));
         user.setRoles(Set.of(defaultRole));
 
         User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCartForUser(savedUser);
+
         return userMapper.toDto(savedUser);
     }
 }
