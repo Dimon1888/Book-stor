@@ -9,8 +9,10 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Getter
@@ -29,7 +31,8 @@ public class Category {
 
     private String description;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "is_deleted", nullable = false)
+    @JdbcTypeCode(SqlTypes.TINYINT)
     private boolean isDeleted = false;
 
     public Category(Long id) {
