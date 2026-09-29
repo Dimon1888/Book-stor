@@ -16,8 +16,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -46,7 +48,8 @@ public class User implements UserDetails {
 
     private String shippingAddress;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIT) // Вказано BIT відповідно до схеми у MySQL
     private boolean isDeleted = false;
 
     @ManyToMany
