@@ -40,8 +40,6 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/error"
                                 ).permitAll()
-                                .requestMatchers(HttpMethod.PATCH, "/orders/{id}").hasRole("ADMIN")
-                                .requestMatchers("/orders/**").hasRole("USER")
                                 .anyRequest()
                                 .authenticated()
                 )

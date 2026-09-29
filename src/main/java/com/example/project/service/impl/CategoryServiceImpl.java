@@ -34,14 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public CategoryDto save(CreateCategoryRequestDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
-    @Transactional
     public CategoryDto update(Long id, CreateCategoryRequestDto categoryDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find category by id: " + id));
@@ -50,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException("Can't delete category with id: " + id

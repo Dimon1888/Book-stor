@@ -46,14 +46,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public BookDto createBook(CreateBookRequestDto bookDto) {
         Book book = bookMapper.toEntity(bookDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    @Transactional
     public BookDto update(Long id, CreateBookRequestDto bookDto) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
@@ -62,7 +60,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         if (!bookRepository.existsById(id)) {
             throw new EntityNotFoundException("Can't delete book with id: " + id

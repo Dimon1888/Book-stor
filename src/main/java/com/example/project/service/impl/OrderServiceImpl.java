@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -38,7 +39,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    @Transactional
     public OrderResponseDto placeOrder(Long userId, CreateOrderRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -114,7 +114,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public OrderResponseDto updateOrderStatus(
             Long orderId, UpdateOrderStatusRequestDto requestDto) {
         Order order = orderRepository.findById(orderId)
