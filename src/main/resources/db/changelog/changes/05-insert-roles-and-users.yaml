@@ -2,9 +2,9 @@ databaseChangeLog:
   - changeSet:
       id: insert-role-admin
       author: developer
-      preconditions:
+      preConditions:
         - onFail: MARK_RAN
-        - sqlCheck:
+          sqlCheck:
             expectedResult: 0
             sql: SELECT COUNT(*) FROM roles WHERE name = 'ROLE_ADMIN'
       changes:
@@ -18,9 +18,9 @@ databaseChangeLog:
   - changeSet:
       id: insert-role-user
       author: developer
-      preconditions:
+      preConditions:
         - onFail: MARK_RAN
-        - sqlCheck:
+          sqlCheck:
             expectedResult: 0
             sql: SELECT COUNT(*) FROM roles WHERE name = 'ROLE_USER'
       changes:
@@ -34,9 +34,9 @@ databaseChangeLog:
   - changeSet:
       id: insert-default-users
       author: developer
-      preconditions:
+      preConditions:
         - onFail: MARK_RAN
-        - sqlCheck:
+          sqlCheck:
             expectedResult: 0
             sql: SELECT COUNT(*) FROM users WHERE email IN ('admin@example.com', 'user@example.com')
       changes:
@@ -80,9 +80,9 @@ databaseChangeLog:
   - changeSet:
       id: assign-roles-to-users
       author: developer
-      preconditions:
+      preConditions:
         - onFail: MARK_RAN
-        - sqlCheck:
+          sqlCheck:
             expectedResult: 0
             sql: SELECT COUNT(*) FROM users_roles
       changes:

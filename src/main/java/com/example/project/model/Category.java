@@ -29,7 +29,7 @@ public class Category {
 
     private String description;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
     public Category(Long id) {
