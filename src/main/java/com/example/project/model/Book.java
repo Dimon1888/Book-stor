@@ -17,10 +17,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Getter
@@ -50,7 +48,6 @@ public class Book {
     private String coverImage;
 
     @Column(name = "is_deleted", nullable = false)
-    @JdbcTypeCode(SqlTypes.TINYINT)
     private boolean isDeleted = false;
 
     @ManyToMany(fetch = FetchType.LAZY)

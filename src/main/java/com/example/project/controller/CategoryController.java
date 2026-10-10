@@ -32,34 +32,34 @@ public class CategoryController {
     private final BookService bookService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") // Змінено з 'ROLE_ADMIN'
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a new category", description =
-            "Create a new category (ADMIN only)")
+    @Operation(summary = "Create a new category", description = "Create a new"
+            + " category (ADMIN only)")
     public CategoryDto createCategory(@RequestBody @Valid CreateCategoryRequestDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @Operation(summary = "Get all categories", description =
-            "Retrieve a list of categories with pagination")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get all categories", description = "Retrieve "
+            + "a list of categories with pagination")
     public Page<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @Operation(summary = "Get category by ID", description =
-            "Retrieve a specific category by its ID")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get category by ID", description = "Retrieve a "
+            + "specific category by its ID")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Update category", description =
-            "Update an existing category by ID (ADMIN only)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update category", description = "Update an"
+            + " existing category by ID (ADMIN only)")
     public CategoryDto updateCategory(
             @PathVariable Long id,
             @RequestBody @Valid CreateCategoryRequestDto categoryDto
@@ -68,7 +68,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete category", description = "Delete a category by ID (ADMIN only)")
     public void deleteCategory(@PathVariable Long id) {
@@ -76,7 +76,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(
             summary = "Get books by category ID",
             description = "Retrieve books belonging to a specific category with pagination"

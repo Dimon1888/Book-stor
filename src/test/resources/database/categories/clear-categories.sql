@@ -1,0 +1,1 @@
+clear-categories.sql
